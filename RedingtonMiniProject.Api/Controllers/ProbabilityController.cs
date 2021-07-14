@@ -1,5 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RedingtonMiniProject.Api.Constants;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Mvc;
+using RedingtonMiniProject.Api.Data;
+using RedingtonMiniProject.Api.Models;
+using RedingtonMiniProject.Api.Validators;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace RedingtonMiniProject.Api.Controllers
 {
@@ -8,31 +16,39 @@ namespace RedingtonMiniProject.Api.Controllers
     public class ProbabilityController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Calculate(decimal probabilityOne, decimal probabilityTwo, ProbabilityFunctionEnum probabilityFunction)
+        public async Task<IActionResult> Calculate([FromQuery] ProbabilityCalculationDto dto)
         {
-            if (!ValidateProbability(probabilityOne) || !ValidateProbability(probabilityTwo))
+            if (!Validator.ValidateProbabilityFunction(dto.ProbabilityFunction))
             {
-                return BadRequest("Probabilities cannot be less than 0 or greater than 1.");
+                return BadRequest("Invalid probability function.");
             }
 
-            if (probabilityFunction == ProbabilityFunctionEnum.CombinedWith)
+            if (dto.ProbabilityFunction == Database.CombinedWith)
             {
-                return Ok(probabilityOne * probabilityTwo);
+                return Ok(dto.ProbabilityOne * dto.ProbabilityTwo);
             }
 
-            var result = probabilityOne + probabilityTwo - probabilityOne * probabilityTwo;
+            var result = dto.ProbabilityOne + dto.ProbabilityTwo - dto.ProbabilityOne * dto.ProbabilityTwo;
+
+            var logs = new List<Log>
+            {
+                new Log
+                {
+                    Date = DateTime.UtcNow,
+                    Type = dto.ProbabilityFunction,
+                    ProbabilityOne = dto.ProbabilityOne,
+                    ProbabilityTwo = dto.ProbabilityTwo,
+                    Result = result,
+                }
+            };
+
+            using (var writer = new StreamWriter("log.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                await csv.WriteRecordsAsync(logs);
+            }
 
             return Ok(result);
-        }
-
-        private static bool ValidateProbability(decimal probability)
-        {
-            if (probability < 0 || probability > 1)
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }
