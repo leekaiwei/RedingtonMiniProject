@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RedingtonMiniProject.Api.Constants;
 
 namespace RedingtonMiniProject.Api.Controllers
 {
@@ -7,14 +8,14 @@ namespace RedingtonMiniProject.Api.Controllers
     public class ProbabilityController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get(decimal probabilityOne, decimal probabilityTwo, ProbabilityFunction probabilityFunction)
+        public IActionResult Calculate(decimal probabilityOne, decimal probabilityTwo, ProbabilityFunctionEnum probabilityFunction)
         {
             if (!ValidateProbability(probabilityOne) || !ValidateProbability(probabilityTwo))
             {
                 return BadRequest("Probabilities cannot be less than 0 or greater than 1.");
             }
 
-            if (probabilityFunction == ProbabilityFunction.CombinedWith)
+            if (probabilityFunction == ProbabilityFunctionEnum.CombinedWith)
             {
                 return Ok(probabilityOne * probabilityTwo);
             }
@@ -33,11 +34,5 @@ namespace RedingtonMiniProject.Api.Controllers
 
             return true;
         }
-    }
-
-    public enum ProbabilityFunction
-    {
-        CombinedWith,
-        Either,
     }
 }
