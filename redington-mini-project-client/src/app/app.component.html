@@ -1,0 +1,14 @@
+<form [formGroup]="form">
+  <input type="number" formControlName="probabilityOne">
+  <input type="number" formControlName="probabilityTwo">
+
+  <input id="combined" type="radio" value="0" formControlName="probabilityFunction">
+  <label for="combined">Combined</label>
+
+  <input id="either" type="radio" value="1" formControlName="probabilityFunction">
+  <label for="either">Either</label>
+</form>
+
+<button type="submit" (click)="calculate()">Calculate</button>
+
+{{ result }}
