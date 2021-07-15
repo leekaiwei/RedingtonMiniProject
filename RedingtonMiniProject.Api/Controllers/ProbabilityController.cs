@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RedingtonMiniProject.Api.Data;
+using RedingtonMiniProject.Api.Calculators;
 using RedingtonMiniProject.Api.Logging;
 using RedingtonMiniProject.Api.Models;
 using RedingtonMiniProject.Api.Validators;
+using System;
 using System.Threading.Tasks;
 
 namespace RedingtonMiniProject.Api.Controllers
@@ -11,9 +12,9 @@ namespace RedingtonMiniProject.Api.Controllers
     [Route("[controller]")]
     public class ProbabilityController : ControllerBase
     {
-        private readonly ILogger _logger;
+        private readonly ILogService _logger;
 
-        public ProbabilityController(ILogger logger)
+        public ProbabilityController(ILogService logger)
         {
             _logger = logger;
         }
@@ -26,12 +27,13 @@ namespace RedingtonMiniProject.Api.Controllers
                 return BadRequest("Invalid probability function.");
             }
 
-            if (dto.ProbabilityFunction == Database.CombinedWith)
+            var calculator = CalculatorProvider.GetCalculator(dto.ProbabilityFunction);
+            if (calculator == null)
             {
-                return Ok(dto.ProbabilityOne * dto.ProbabilityTwo);
+                throw new NullReferenceException($"Calculator {dto.ProbabilityFunction} not found");
             }
 
-            var result = dto.ProbabilityOne + dto.ProbabilityTwo - dto.ProbabilityOne * dto.ProbabilityTwo;
+            var result = calculator.Calculate(dto.ProbabilityOne, dto.ProbabilityTwo);
 
             await _logger.LogAsync(dto, result);
 

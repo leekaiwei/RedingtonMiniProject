@@ -2,7 +2,7 @@
 
 namespace RedingtonMiniProject.Api.Data
 {
-    public static class Database
+    public static class ProbablityTypes
     {
         public const string CombinedWith = "CombinedWith";
         public const string Either = "Either";

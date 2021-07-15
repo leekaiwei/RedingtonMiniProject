@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace RedingtonMiniProject.Api.Logging
 {
-    public interface ILogger
+    public interface ILogService
     {
         Task LogAsync(ProbabilityCalculationDto dto, decimal result);
     }

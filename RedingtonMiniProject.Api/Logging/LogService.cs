@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RedingtonMiniProject.Api.Logging
 {
-    public class Logger : ILogger
+    public class LogService : ILogService
     {
         public async Task LogAsync(ProbabilityCalculationDto dto, decimal result)
         {

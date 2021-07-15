@@ -10,7 +10,7 @@ namespace RedingtonMiniProject.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(Database.ProbabilityFunctions);
+            return Ok(ProbablityTypes.ProbabilityFunctions);
         }
     }
 }

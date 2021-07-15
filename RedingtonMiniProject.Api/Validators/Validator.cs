@@ -6,7 +6,7 @@ namespace RedingtonMiniProject.Api.Validators
     {
         public static bool ValidateProbabilityFunction(string probabilityFunction)
         {
-            if (!Database.ProbabilityFunctions.Contains(probabilityFunction))
+            if (!ProbablityTypes.ProbabilityFunctions.Contains(probabilityFunction))
             {
                 return false;
             }
