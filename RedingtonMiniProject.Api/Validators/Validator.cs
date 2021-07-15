@@ -1,8 +1,4 @@
 ﻿using RedingtonMiniProject.Api.Data;
-using RedingtonMiniProject.Api.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RedingtonMiniProject.Api.Validators
 {
