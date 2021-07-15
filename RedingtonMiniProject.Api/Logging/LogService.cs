@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using RedingtonMiniProject.Api.Models;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,15 @@ namespace RedingtonMiniProject.Api.Logging
                 }
             };
 
-            using (var writer = new StreamWriter("log.csv"))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                await csv.WriteRecordsAsync(logs);
-            }
+                HasHeaderRecord = false,
+            };
+
+            using var stream = File.Open("log.csv", FileMode.Append);
+            using var writer = new StreamWriter(stream);
+            using var csv = new CsvWriter(writer, config);
+            await csv.WriteRecordsAsync(logs);
         }
     }
 }

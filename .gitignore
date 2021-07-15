@@ -249,6 +249,4 @@ paket-files/
 .idea/
 *.sln.iml
 
-# Docker Local Config Files
-.env
-/appraiser-portal/src/reports/karma
+log.csv

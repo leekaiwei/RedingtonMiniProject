@@ -11,19 +11,29 @@ export class AppComponent implements OnInit {
   form!: FormGroup;
   result!: number;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) {
+  probabilityFunctions!: string[];
 
+  error!: string | null;
+
+  private readonly url = 'http://localhost:14764';
+
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) {
+    
   }
 
   public ngOnInit(): void {
     this.form = this.formBuilder.group({
-      probabilityOne: [null, Validators.required],
-      probabilityTwo: [null, Validators.required],
+      probabilityOne: [null, Validators.compose([Validators.required, Validators.min(0), Validators.max(1)])],
+      probabilityTwo: [null, Validators.compose([Validators.required, Validators.min(0), Validators.max(1)])],
       probabilityFunction: [null, Validators.required],
     });
+
+    this.httpClient.get<string[]>(`${this.url}/probabilityFunctions`).subscribe(probabilityFunctions => this.probabilityFunctions = probabilityFunctions)
   }
 
   public calculate(): void {
+    this.error = null;
+
     const data = this.form.getRawValue();
 
     const httpParams = new HttpParams()
@@ -31,7 +41,10 @@ export class AppComponent implements OnInit {
       .append('probabilityTwo', data.probabilityTwo)
       .append('probabilityFunction', data.probabilityFunction);
 
-    this.httpClient.get('http://localhost:14764/probability', { params: httpParams })
-      .subscribe(result => this.result = +result);
+    this.httpClient.get<string>(`${this.url}/probability`, { params: httpParams })
+      .subscribe(
+        result => this.result = parseFloat(result),
+        error => this.error = error.message
+      );
   }
 }

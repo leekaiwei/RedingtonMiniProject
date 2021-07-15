@@ -1,14 +1,23 @@
-<form [formGroup]="form">
-  <input type="number" formControlName="probabilityOne">
-  <input type="number" formControlName="probabilityTwo">
+<ng-container *ngIf="probabilityFunctions; else loading">
+  <form [formGroup]="form">
+    <input type="number" formControlName="probabilityOne">
+    <input type="number" formControlName="probabilityTwo">
 
-  <input id="combined" type="radio" value="0" formControlName="probabilityFunction">
-  <label for="combined">Combined</label>
+    <ng-container *ngFor="let probabilityFunction of probabilityFunctions">
+      <input [id]="probabilityFunction" type="radio" [value]="probabilityFunction" formControlName="probabilityFunction">
+      <label>{{ probabilityFunction }}</label>
+    </ng-container>
+  </form>
 
-  <input id="either" type="radio" value="1" formControlName="probabilityFunction">
-  <label for="either">Either</label>
-</form>
+  <div *ngIf="error">
+    {{ error }}
+  </div>
+  
+  <button type="submit" (click)="calculate()" [disabled]="!form.valid">Calculate</button>
+  
+  {{ result }}
+</ng-container>
 
-<button type="submit" (click)="calculate()">Calculate</button>
-
-{{ result }}
+<ng-template #loading>
+  Loading...
+</ng-template>
