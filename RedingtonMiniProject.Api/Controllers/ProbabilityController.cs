@@ -12,10 +12,12 @@ namespace RedingtonMiniProject.Api.Controllers
     [Route("[controller]")]
     public class ProbabilityController : ControllerBase
     {
+        private readonly CalculatorProvider _calculatorProvider;
         private readonly ILogService _logger;
 
-        public ProbabilityController(ILogService logger)
+        public ProbabilityController(CalculatorProvider calculatorProvider, ILogService logger)
         {
+            _calculatorProvider = calculatorProvider;
             _logger = logger;
         }
 
@@ -27,13 +29,13 @@ namespace RedingtonMiniProject.Api.Controllers
                 return BadRequest("Invalid probability function.");
             }
 
-            var calculator = CalculatorProvider.GetCalculator(dto.ProbabilityFunction);
+            var calculator = _calculatorProvider.GetCalculator(dto.ProbabilityFunction);
             if (calculator == null)
             {
                 throw new NullReferenceException($"Calculator {dto.ProbabilityFunction} not found");
             }
 
-            var result = calculator.Calculate(dto.ProbabilityOne, dto.ProbabilityTwo);
+            var result = calculator.Calculate(dto.ProbabilityA, dto.ProbabilityB);
 
             await _logger.LogAsync(dto, result);
 

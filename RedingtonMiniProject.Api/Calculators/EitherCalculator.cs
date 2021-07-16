@@ -2,9 +2,9 @@
 {
     public class EitherCalculator : ICalculator
     {
-        public decimal Calculate(decimal probabilityOne, decimal probabilityTwo)
+        public decimal Calculate(decimal probabilityA, decimal probabilityB)
         {
-            return probabilityOne + probabilityTwo - probabilityOne * probabilityTwo;
+            return probabilityA + probabilityB - probabilityA * probabilityB;
         }
     }
 }

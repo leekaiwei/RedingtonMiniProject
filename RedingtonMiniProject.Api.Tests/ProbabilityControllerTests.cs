@@ -8,46 +8,47 @@ namespace RedingtonMiniProject.Api.Tests
 {
     public class ProbabilityControllerTests
     {
+        private readonly MockCalculatorProvider _mockCalculatorProvider;
         private readonly ILogService _mockLogService;
 
         public ProbabilityControllerTests()
         {
+            _mockCalculatorProvider = new MockCalculatorProvider();
             _mockLogService = new MockLogService();
         }
 
         [Theory]
-        [InlineData(Data.ProbablityTypes.CombinedWith, 0.25)]
-        [InlineData(Data.ProbablityTypes.Either, 0.75)]
-        public async void Calculate_Outputs_Correct_Result(string probabilityFunction, decimal expectedResult)
+        [InlineData(Data.ProbablityTypes.CombinedWith)]
+        [InlineData(Data.ProbablityTypes.Either)]
+        public async void Calculate_Returns_Ok(string probabilityFunction)
         {
-            var controller = new ProbabilityController(_mockLogService);
+            var controller = new ProbabilityController(_mockCalculatorProvider,_mockLogService);
 
             var dto = new ProbabilityCalculationDto
             {
                 ProbabilityFunction = probabilityFunction,
-                ProbabilityOne = 0.5m,
-                ProbabilityTwo = 0.5m,
+                ProbabilityA = 0.5m,
+                ProbabilityB = 0.5m,
             };
 
             var response = await controller.Calculate(dto);
-            var result = Assert.IsType<OkObjectResult>(response);
-            Assert.Equal(expectedResult, result.Value);
+            Assert.IsType<OkObjectResult>(response);
         }
 
         [Fact]
-        public async void Calculate_InvalidProbabilityFunction_Returns_BadRequest()
+        public async void Calculate_Returns_BadRequest()
         {
-            var controller = new ProbabilityController(_mockLogService);
+            var controller = new ProbabilityController(_mockCalculatorProvider, _mockLogService);
 
             var dto = new ProbabilityCalculationDto
             {
                 ProbabilityFunction = "invalid",
-                ProbabilityOne = 0.5m,
-                ProbabilityTwo = 0.5m,
+                ProbabilityA = 0.5m,
+                ProbabilityB = 0.5m,
             };
 
             var response = await controller.Calculate(dto);
-            var result = Assert.IsType<BadRequestObjectResult>(response);
+            Assert.IsType<BadRequestObjectResult>(response);
         }
     }
 }

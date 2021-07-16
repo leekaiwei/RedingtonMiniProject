@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RedingtonMiniProject.Api.Calculators;
 using RedingtonMiniProject.Api.Logging;
 
 namespace RedingtonMiniProject.Api
@@ -18,6 +19,7 @@ namespace RedingtonMiniProject.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<CalculatorProvider>();
             services.AddTransient<ILogService, LogService>();
 
             services.AddCors();

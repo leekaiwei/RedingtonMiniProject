@@ -8,9 +8,9 @@ namespace RedingtonMiniProject.Api.Models
 
         public string Type { get; set; }
 
-        public decimal ProbabilityOne { get; set; }
+        public decimal ProbabilityA { get; set; }
 
-        public decimal ProbabilityTwo { get; set; }
+        public decimal ProbabilityB { get; set; }
 
         public decimal Result { get; set; }
     }

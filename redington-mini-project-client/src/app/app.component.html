@@ -1,7 +1,7 @@
 <ng-container *ngIf="probabilityFunctions; else loading">
   <form [formGroup]="form">
-    <input type="number" formControlName="probabilityOne">
-    <input type="number" formControlName="probabilityTwo">
+    <input type="number" formControlName="probabilityA">
+    <input type="number" formControlName="probabilityB">
 
     <ng-container *ngFor="let probabilityFunction of probabilityFunctions">
       <input [id]="probabilityFunction" type="radio" [value]="probabilityFunction" formControlName="probabilityFunction">

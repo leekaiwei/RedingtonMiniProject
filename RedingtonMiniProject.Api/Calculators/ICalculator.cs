@@ -2,6 +2,6 @@
 {
     public interface ICalculator
     {
-        decimal Calculate(decimal probabilityOne, decimal probabilityTwo);
+        decimal Calculate(decimal probabilityA, decimal probabilityB);
     }
 }

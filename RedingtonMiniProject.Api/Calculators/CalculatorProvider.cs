@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RedingtonMiniProject.Api.Calculators
 {
-    public static class CalculatorProvider
+    public class CalculatorProvider
     {
         private static readonly IReadOnlyDictionary<string, Type> _calculators = new Dictionary<string, Type>
         {
@@ -12,7 +12,7 @@ namespace RedingtonMiniProject.Api.Calculators
             { ProbablityTypes.Either, typeof(EitherCalculator) },
         };
 
-        public static ICalculator GetCalculator(string probabilityFunction)
+        public virtual ICalculator GetCalculator(string probabilityFunction)
         {
             if (string.IsNullOrEmpty(probabilityFunction))
             {

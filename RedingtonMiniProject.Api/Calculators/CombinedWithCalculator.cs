@@ -2,9 +2,9 @@
 {
     public class CombinedWithCalculator : ICalculator
     {
-        public decimal Calculate(decimal probabilityOne, decimal probabilityTwo)
+        public decimal Calculate(decimal probabilityA, decimal probabilityB)
         {
-            return probabilityOne * probabilityTwo;
+            return probabilityA * probabilityB;
         }
     }
 }

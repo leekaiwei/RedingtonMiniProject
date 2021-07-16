@@ -11,6 +11,8 @@ namespace RedingtonMiniProject.Api.Logging
 {
     public class LogService : ILogService
     {
+        private const string _logFileName = "log.csv";
+
         public async Task LogAsync(ProbabilityCalculationDto dto, decimal result)
         {
             var logs = new List<Log>
@@ -19,18 +21,18 @@ namespace RedingtonMiniProject.Api.Logging
                 {
                     Date = DateTime.UtcNow,
                     Type = dto.ProbabilityFunction,
-                    ProbabilityOne = dto.ProbabilityOne,
-                    ProbabilityTwo = dto.ProbabilityTwo,
+                    ProbabilityA = dto.ProbabilityA,
+                    ProbabilityB = dto.ProbabilityB,
                     Result = result,
                 }
             };
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                HasHeaderRecord = false,
+                HasHeaderRecord = File.Exists(_logFileName) ? false : true,
             };
 
-            using var stream = File.Open("log.csv", FileMode.Append);
+            using var stream = File.Open(_logFileName, FileMode.Append);
             using var writer = new StreamWriter(stream);
             using var csv = new CsvWriter(writer, config);
             await csv.WriteRecordsAsync(logs);
